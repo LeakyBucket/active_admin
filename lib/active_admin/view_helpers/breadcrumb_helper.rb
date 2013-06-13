@@ -12,7 +12,7 @@ module ActiveAdmin
           # If name is nil, look up the model translation, using `titlecase` as the backup.
           if part =~ /^\d|^[a-f0-9]{24}$/ && parent = parts[index-1]
             klass = parent.singularize.camelcase.constantize rescue nil
-            obj   = klass.find_by_id(part) if klass
+            obj   = klass.where(klass.primary_key.to_sym => part).first if klass
             name  = display_name(obj)      if obj
           end
           name ||= I18n.t "activerecord.models.#{part.singularize}", :count => 1.1, :default => part.titlecase
